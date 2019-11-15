@@ -1,9 +1,14 @@
 package com.example.persistingdatareactJPA.models;
 
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,12 +23,16 @@ public class Course {
   @JsonIgnore
   private Faculty author;
   
+  @OneToMany(mappedBy = "course")
+  private List<Module> modules;
+  
 public Course() {}
-public Course(int id, String name, Faculty author) {
+public Course(int id, String name, Faculty author, List<Module> modules) {
 	super();
 	this.id = id;
 	this.name = name;
 	this.author = author;
+	this.modules = modules;
 }
 
 public int getId() {
@@ -48,5 +57,15 @@ public void setAuthor(Faculty faculty) {
 	     faculty.getAuthoredCourses().add(this);
 	     }
 	  }
+
+public void set(Course course) {
+		if (course.getName() != null) {
+			this.setName(course.getName());
+		}
+		if (course.author != null) {
+			this.setAuthor(course.getAuthor());
+		}
+	}
+
 }
 
